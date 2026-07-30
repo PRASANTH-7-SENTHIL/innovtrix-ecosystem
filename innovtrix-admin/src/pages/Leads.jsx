@@ -13,7 +13,8 @@ export default function Leads() {
     const fetchLeads = async () => {
       try {
         const token = localStorage.getItem('admin_token')
-        const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/api/quotes`, {
+        const currentApiUrl = localStorage.getItem('backend_url') || import.meta.env.VITE_API_URL || 'https://innovtrix-ecosystem-nine.vercel.app'
+        const response = await fetch(`${currentApiUrl}/api/quotes`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -37,7 +38,8 @@ export default function Leads() {
   const handleUpdateLead = async (updatedLead) => {
     try {
       const token = localStorage.getItem('admin_token')
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/api/quotes/${updatedLead.id}`, {
+      const currentApiUrl = localStorage.getItem('backend_url') || import.meta.env.VITE_API_URL || 'https://innovtrix-ecosystem-nine.vercel.app'
+      const response = await fetch(`${currentApiUrl}/api/quotes/${updatedLead.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -74,7 +76,7 @@ export default function Leads() {
     <div className="space-y-8 font-sans">
       
       {/* Module Title */}
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h1 className="text-2xl font-bold text-white">Leads & Inquiries</h1>
           <p className="text-slate-500 text-xs mt-1">Manage quote proposals and customer consultations.</p>

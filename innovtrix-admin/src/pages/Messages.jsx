@@ -10,7 +10,8 @@ export default function Messages() {
     const fetchMessages = async () => {
       try {
         const token = localStorage.getItem('admin_token')
-        const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/api/contact`, {
+        const currentApiUrl = localStorage.getItem('backend_url') || import.meta.env.VITE_API_URL || 'https://innovtrix-ecosystem-nine.vercel.app'
+        const response = await fetch(`${currentApiUrl}/api/contact`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -31,15 +32,33 @@ export default function Messages() {
     fetchMessages()
   }, [])
 
-  const handleMarkReplied = (mId) => {
-    setMessages(messages.map(m => m.id === mId ? { ...m, status: 'Replied' } : m))
-    setSelectedMsg(null)
+  const handleMarkReplied = async (mId) => {
+    try {
+      const token = localStorage.getItem('admin_token')
+      const currentApiUrl = localStorage.getItem('backend_url') || import.meta.env.VITE_API_URL || 'https://innovtrix-ecosystem-nine.vercel.app'
+      const response = await fetch(`${currentApiUrl}/api/contact/${mId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ status: 'Replied' })
+      })
+      if (response.ok) {
+        setMessages(messages.map(m => m.id === mId ? { ...m, status: 'Replied' } : m))
+      }
+    } catch (err) {
+      console.error('Failed to update message status:', err)
+    } finally {
+      setSelectedMsg(null)
+    }
   }
 
   const handleDeleteMsg = async (mId) => {
     try {
       const token = localStorage.getItem('admin_token')
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/api/contact/${mId}`, {
+      const currentApiUrl = localStorage.getItem('backend_url') || import.meta.env.VITE_API_URL || 'https://innovtrix-ecosystem-nine.vercel.app'
+      const response = await fetch(`${currentApiUrl}/api/contact/${mId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -59,7 +78,7 @@ export default function Messages() {
     <div className="space-y-8 font-sans">
       
       {/* Module Title */}
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h1 className="text-2xl font-bold text-white">Client Messages</h1>
           <p className="text-slate-500 text-xs mt-1">Review contact form inquiries received from public users.</p>
@@ -93,7 +112,9 @@ export default function Messages() {
                   </td>
                   <td className="text-xs text-slate-300 font-semibold">{msg.subject}</td>
                   <td className="text-xs text-slate-400 max-w-xs truncate">{msg.message}</td>
-                  <td className="text-xs text-slate-400">{msg.date}</td>
+                  <td className="text-xs text-slate-400">
+                    {msg.created_at ? new Date(msg.created_at).toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' }) : 'N/A'}
+                  </td>
                   <td>
                     <span className={`badge ${
                       msg.status === 'Unread' 
@@ -125,7 +146,9 @@ export default function Messages() {
             <div className="flex justify-between items-center border-b border-white/5 pb-4">
               <div>
                 <h3 className="text-lg font-bold text-white">Client Inquiry</h3>
-                <p className="text-xs text-slate-500">{selectedMsg.name} | {selectedMsg.date}</p>
+                <p className="text-xs text-slate-500">
+                  {selectedMsg.name} | {selectedMsg.created_at ? new Date(selectedMsg.created_at).toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'N/A'}
+                </p>
               </div>
               <button 
                 onClick={() => setSelectedMsg(null)}

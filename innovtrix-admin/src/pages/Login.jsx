@@ -13,7 +13,8 @@ export default function Login({ onLoginSuccess }) {
 
     // Attempt real API request first
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/api/auth/login`, {
+      const currentApiUrl = localStorage.getItem('backend_url') || import.meta.env.VITE_API_URL || 'https://innovtrix-ecosystem-nine.vercel.app'
+      const response = await fetch(`${currentApiUrl}/api/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
@@ -55,16 +56,16 @@ export default function Login({ onLoginSuccess }) {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-950 px-6 font-sans relative">
+    <div className="min-h-screen flex items-center justify-center bg-black bg-grid-pattern px-6 font-sans relative">
       {/* Background glow effects */}
       <div className="absolute w-[500px] h-[500px] rounded-full blur-[140px] bg-brand-primary/10 top-1/4 left-1/4 pointer-events-none"></div>
       
-      <div className="w-full max-w-md bg-slate-900 border border-white/5 shadow-glass-dark rounded-2xl p-8 z-10 relative">
+      <div className="w-full max-w-md bg-zinc-900 border border-white/5 shadow-glass-dark rounded-2xl p-8 z-10 relative">
         <div className="text-center mb-8">
-          <span className="text-2xl font-bold bg-gradient-to-r from-brand-primary to-brand-secondary bg-clip-text text-transparent tracking-wider">
-            INNOVTRIX
+          <span className="text-2xl font-black text-white font-sans tracking-tight">
+            INNOVTRIX<span className="text-brand-primary">.</span>
           </span>
-          <h2 className="text-lg font-bold text-white mt-4">Admin Dashboard Suite</h2>
+          <h2 className="text-lg font-bold text-white mt-4 uppercase tracking-tight">Admin Dashboard Suite</h2>
           <p className="text-slate-500 text-xs mt-1">Provide secure credentials to enter dashboard.</p>
         </div>
 

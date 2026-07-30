@@ -30,26 +30,27 @@ export default function Sidebar({ isOpen, onClose }) {
     {
       title: 'Content & Settings',
       items: [
+        { name: 'Client Projects', path: '/portfolio', icon: <FiGrid size={16} /> },
         { name: 'Client Messages', path: '/messages', icon: <FiMail size={16} /> },
         { name: 'System Settings', path: '/settings', icon: <FiSettings size={16} /> }
       ]
     }
   ]
 
-  const activeStyle = "bg-brand-primary/10 border-l-2 border-brand-primary text-white font-medium"
-  const inactiveStyle = "hover:bg-white/5 border-l-2 border-transparent text-slate-400 hover:text-white"
+  const activeStyle = "bg-brand-primary/10 border-l-2 border-brand-primary text-brand-primary font-black uppercase tracking-wider text-[11px] shadow-[0_0_15px_rgba(255,186,0,0.05)]"
+  const inactiveStyle = "hover:bg-white/5 border-l-2 border-transparent text-zinc-400 hover:text-white font-bold uppercase tracking-wider text-[11px]"
 
   return (
-    <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-slate-900 border-r border-white/5 flex flex-col min-h-screen transition-transform duration-200 ease-in-out transform lg:translate-x-0 lg:static lg:block ${
+    <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-zinc-950/95 border-r border-white/5 flex flex-col min-h-screen transition-transform duration-200 ease-in-out transform lg:translate-x-0 lg:static lg:block bg-grid-pattern ${
       isOpen ? 'translate-x-0' : '-translate-x-full'
     } font-sans`}>
       {/* Brand Logo */}
       <div className="p-6 border-b border-white/5 flex items-center justify-between">
         <div className="flex items-center space-x-2">
-          <span className="text-xl font-bold bg-gradient-to-r from-brand-primary to-brand-secondary bg-clip-text text-transparent tracking-wider">
+          <span className="text-xl font-black bg-gradient-to-r from-brand-primary to-brand-secondary bg-clip-text text-transparent tracking-widest uppercase">
             INNOVTRIX
           </span>
-          <span className="text-[10px] px-2 py-0.5 bg-brand-primary/10 text-brand-primary border border-brand-primary/20 rounded-full font-bold">
+          <span className="text-[9px] px-2.5 py-0.5 bg-brand-primary/10 text-brand-primary border border-brand-primary/20 rounded-full font-black uppercase tracking-wider">
             Admin
           </span>
         </div>

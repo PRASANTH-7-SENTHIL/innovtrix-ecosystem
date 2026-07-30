@@ -15,6 +15,7 @@ import Invoices from './pages/Invoices'
 import Payments from './pages/Payments'
 import Messages from './pages/Messages'
 import Settings from './pages/Settings'
+import Portfolio from './pages/Portfolio'
 
 export default function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
@@ -37,7 +38,7 @@ export default function App() {
 
   if (checkingAuth) {
     return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center text-slate-400 text-sm">
+      <div className="min-h-screen bg-black bg-grid-pattern flex items-center justify-center text-slate-400 text-sm">
         Checking session authenticity...
       </div>
     )
@@ -49,12 +50,12 @@ export default function App() {
 
   return (
     <Router>
-      <div className="flex bg-slate-950 min-h-screen font-sans overflow-x-hidden">
+      <div className="flex bg-black bg-grid-pattern min-h-screen font-sans overflow-x-hidden">
         
         {/* Mobile Sidebar Backdrop Overlay */}
         {sidebarOpen && (
           <div 
-            className="fixed inset-0 z-40 bg-slate-950/60 lg:hidden"
+            className="fixed inset-0 z-40 bg-black/60 lg:hidden"
             onClick={() => setSidebarOpen(false)}
           ></div>
         )}
@@ -78,6 +79,7 @@ export default function App() {
               <Route path="/invoices" element={<Invoices />} />
               <Route path="/payments" element={<Payments />} />
               <Route path="/messages" element={<Messages />} />
+              <Route path="/portfolio" element={<Portfolio />} />
               <Route path="/settings" element={<Settings />} />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>

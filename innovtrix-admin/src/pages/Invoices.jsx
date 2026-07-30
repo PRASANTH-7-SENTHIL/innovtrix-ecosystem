@@ -19,7 +19,8 @@ export default function Invoices() {
     const fetchInvoices = async () => {
       try {
         const token = localStorage.getItem('admin_token')
-        const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/api/invoices`, {
+        const currentApiUrl = localStorage.getItem('backend_url') || import.meta.env.VITE_API_URL || 'https://innovtrix-ecosystem-nine.vercel.app'
+        const response = await fetch(`${currentApiUrl}/api/invoices`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -43,7 +44,8 @@ export default function Invoices() {
 
     try {
       const token = localStorage.getItem('admin_token')
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/api/invoices`, {
+      const currentApiUrl = localStorage.getItem('backend_url') || import.meta.env.VITE_API_URL || 'https://innovtrix-ecosystem-nine.vercel.app'
+      const response = await fetch(`${currentApiUrl}/api/invoices`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -88,7 +90,7 @@ export default function Invoices() {
     <div className="space-y-8 font-sans">
       
       {/* Module Title */}
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h1 className="text-2xl font-bold text-white">Invoices</h1>
           <p className="text-slate-500 text-xs mt-1">Generate invoices and track client payment deadlines.</p>

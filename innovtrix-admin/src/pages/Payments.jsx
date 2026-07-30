@@ -8,7 +8,8 @@ export default function Payments() {
     const fetchPayments = async () => {
       try {
         const token = localStorage.getItem('admin_token')
-        const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/api/payments`, {
+        const currentApiUrl = localStorage.getItem('backend_url') || import.meta.env.VITE_API_URL || 'https://innovtrix-ecosystem-nine.vercel.app'
+        const response = await fetch(`${currentApiUrl}/api/payments`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }

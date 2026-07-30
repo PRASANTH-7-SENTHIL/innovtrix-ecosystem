@@ -8,8 +8,8 @@ export default function Contact() {
     phone: '',
     company_name: '',
     business_type: 'Retail Shops',
-    service_type: 'E-Commerce Website Development',
-    budget: '₹5,000 - ₹10,000',
+    service_type: 'Business & Commercial Websites',
+    budget: '₹5,000 - ' + '₹10,000',
     subject: 'Web Development Proposal',
     message: ''
   })
@@ -17,6 +17,17 @@ export default function Contact() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
   const [errorMsg, setErrorMsg] = useState('')
+
+  const services = [
+    'Business & Commercial Websites',
+    'Industry-Specific Websites',
+    'E-Commerce Development',
+    'SaaS Application Development',
+    'IoT Applications & Smart Solutions',
+    'Cloud Deployment & Monitoring',
+    'AI & Automation Solutions',
+    'Custom Web Applications'
+  ]
 
   const businessTypes = [
     'Textile', 'Garments', 'Retail Shops', 'Wholesale Businesses', 
@@ -28,9 +39,9 @@ export default function Contact() {
 
   const budgets = [
     'Under ₹5,000',
-    '₹5,000 - ₹10,000',
-    '₹10,000 - ₹25,000',
-    '₹25,000 - ₹50,000',
+    '₹5,000 - ' + '₹10,000',
+    '₹10,000 - ' + '₹25,000',
+    '₹25,000 - ' + '₹50,000',
     '₹50,000+'
   ]
 
@@ -44,7 +55,7 @@ export default function Contact() {
     setErrorMsg('')
     
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/api/quotes`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://innovtrix-ecosystem-nine.vercel.app'}/api/contact`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -53,11 +64,8 @@ export default function Contact() {
           name: formData.name,
           email: formData.email,
           phone: formData.phone,
-          company: formData.company_name,
-          business_type: formData.business_type,
-          service_type: formData.service_type,
-          budget: formData.budget,
-          details: `Subject: ${formData.subject}\nMessage: ${formData.message}`
+          subject: formData.subject || 'Web Development Inquiry',
+          message: `Company: ${formData.company_name || 'N/A'}\nBusiness Sector: ${formData.business_type}\nService Required: ${formData.service_type}\nEstimated Budget: ${formData.budget}\n\nMessage:\n${formData.message}`
         }),
       })
       
@@ -69,8 +77,8 @@ export default function Contact() {
           phone: '',
           company_name: '',
           business_type: 'Retail Shops',
-          service_type: 'E-Commerce Website Development',
-          budget: '₹5,000 - ₹10,000',
+          service_type: 'Business & Commercial Websites',
+          budget: '₹5,000 - ' + '₹10,000',
           subject: 'Web Development Proposal',
           message: ''
         })
@@ -89,30 +97,30 @@ export default function Contact() {
   }
 
   return (
-    <div className="font-sans">
+    <div className="font-sans bg-[#050505] text-zinc-100 min-h-screen bg-grid-pattern">
       {/* Intro Banner */}
-      <section className="bg-slate-950 py-20 px-6 relative border-b border-white/5">
-        <div className="glow-bg bg-brand-primary top-0 right-10"></div>
+      <section className="bg-transparent py-20 px-6 relative border-b border-white/10">
+        <div className="glow-bg bg-brand-primary/10 top-0 right-10"></div>
         <div className="max-w-4xl mx-auto text-center z-10 relative">
-          <span className="text-xs font-semibold text-brand-primary uppercase tracking-wider">GET IN TOUCH</span>
-          <h1 className="text-4xl md:text-6xl font-bold text-white mt-4 tracking-tight">
+          <span className="text-xs font-black text-brand-primary uppercase tracking-widest bg-brand-primary/10 border border-brand-primary/20 px-4 py-1.5 rounded-full">GET IN TOUCH</span>
+          <h1 className="text-4xl md:text-6xl font-black text-white mt-4 tracking-tight uppercase">
             Contact Our Studio
           </h1>
-          <p className="text-slate-400 text-lg mt-6 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-zinc-400 text-lg mt-6 max-w-2xl mx-auto leading-relaxed font-semibold">
             Provide your business requirements, service requests, and estimated budget ranges below. We will follow up with a proposal.
           </p>
         </div>
       </section>
 
       {/* Form + Sidebar Details */}
-      <section className="py-24 bg-slate-950 px-6">
+      <section className="py-24 bg-transparent px-6">
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16">
           
           {/* Contact Details sidebar */}
           <div className="lg:col-span-4 space-y-8" data-aos="fade-right">
             <div>
-              <h2 className="text-2xl font-bold text-white mb-2">Let's build something great.</h2>
-              <p className="text-slate-400 text-sm leading-relaxed">
+              <h2 className="text-2xl font-black text-white mb-2 uppercase">Let's build something great.</h2>
+              <p className="text-zinc-405 text-sm leading-relaxed font-semibold">
                 Contact our partnership leads directly to discuss your design criteria, e-commerce requirements, and deadline details.
               </p>
             </div>
@@ -123,8 +131,8 @@ export default function Contact() {
                   <FaEnvelope size={18} />
                 </div>
                 <div>
-                  <h4 className="text-white font-semibold text-sm">General Enquiries</h4>
-                  <p className="text-slate-400 text-sm mt-0.5">innovtrix30@gmail.com</p>
+                  <h4 className="text-white font-bold text-sm uppercase">General Enquiries</h4>
+                  <p className="text-zinc-400 text-sm mt-0.5 font-semibold">innovtrix30@gmail.com</p>
                 </div>
               </div>
 
@@ -133,8 +141,8 @@ export default function Contact() {
                   <FaPhoneAlt size={18} />
                 </div>
                 <div>
-                  <h4 className="text-white font-semibold text-sm">Call Support</h4>
-                  <div className="flex flex-col space-y-1 text-slate-400 text-sm mt-0.5">
+                  <h4 className="text-white font-bold text-sm uppercase">Call Support</h4>
+                  <div className="flex flex-col space-y-1 text-zinc-400 text-sm mt-0.5 font-semibold">
                     <a href="tel:+917200608333" className="hover:text-brand-primary transition-colors">+91 7200608333</a>
                     <a href="tel:+917603871116" className="hover:text-brand-primary transition-colors">+91 7603871116</a>
                   </div>
@@ -144,9 +152,9 @@ export default function Contact() {
 
             {/* Socials */}
             <div className="border-t border-white/10 pt-8">
-              <h4 className="text-white font-semibold text-sm mb-4">Instant Chat</h4>
+              <h4 className="text-white font-bold text-sm mb-4 uppercase">Instant Chat</h4>
               <div className="flex">
-                <a href="https://wa.me/917200608333?text=Hello%20Innovtrix!%20I'm%20interested%20in%20building%20a%20website%2520for%20my%20business." target="_blank" rel="noopener noreferrer" className="p-3 px-5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl transition-all flex items-center justify-center gap-2 text-xs font-bold uppercase tracking-wider shadow-glow shadow-emerald-500/10">
+                <a href="https://wa.me/917200608333?text=Hello%20Innovtrix!%20I'm%20interested%20in%20building%20a%20website%2520for%20my%20business." target="_blank" rel="noopener noreferrer" className="p-3 px-5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl transition-all flex items-center justify-center gap-2 text-xs font-bold uppercase tracking-wider shadow-md">
                   <FaWhatsapp size={14} /> WhatsApp Support
                 </a>
               </div>
@@ -155,19 +163,19 @@ export default function Contact() {
 
           {/* Expanded Contact Form */}
           <div className="lg:col-span-8" data-aos="fade-left">
-            <div className="glass-card p-8 border-white/5 bg-slate-900/40">
+            <div className="premium-card p-8 bg-zinc-950/80 border border-white/5 shadow-2xl">
               {isSuccess ? (
                 <div className="text-center py-12">
                   <div className="w-16 h-16 bg-brand-primary/20 text-brand-primary border border-brand-primary/30 rounded-full flex items-center justify-center mx-auto mb-6 text-2xl">
                     ✓
                   </div>
-                  <h3 className="text-2xl font-bold text-white mb-2">Details Submitted!</h3>
-                  <p className="text-slate-400 text-sm max-w-md mx-auto">
+                  <h3 className="text-2xl font-black text-white mb-2 uppercase">Details Submitted!</h3>
+                  <p className="text-zinc-400 text-sm max-w-md mx-auto font-semibold">
                     Thank you. Your details and budget choices have been sent directly to the Innovtrix admin dashboard. We will review and follow up shortly.
                   </p>
                   <button 
                     onClick={() => setIsSuccess(false)}
-                    className="btn-primary mt-8 px-6 py-2.5"
+                    className="btn-primary mt-8 px-6 py-2.5 mx-auto"
                   >
                     Submit Another Inquiry
                   </button>
@@ -178,7 +186,7 @@ export default function Contact() {
                   {/* Basic Contacts */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                      <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Your Name *</label>
+                      <label className="block text-xs font-black text-zinc-400 uppercase tracking-widest mb-2">Your Name *</label>
                       <input
                         type="text"
                         name="name"
@@ -190,7 +198,7 @@ export default function Contact() {
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Email Address *</label>
+                      <label className="block text-xs font-black text-zinc-400 uppercase tracking-widest mb-2">Email Address *</label>
                       <input
                         type="email"
                         name="email"
@@ -205,7 +213,7 @@ export default function Contact() {
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                      <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Phone Number *</label>
+                      <label className="block text-xs font-black text-zinc-400 uppercase tracking-widest mb-2">Phone Number *</label>
                       <input
                         type="tel"
                         name="phone"
@@ -217,7 +225,7 @@ export default function Contact() {
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Company Name</label>
+                      <label className="block text-xs font-black text-zinc-400 uppercase tracking-widest mb-2">Company Name</label>
                       <input
                         type="text"
                         name="company_name"
@@ -232,44 +240,47 @@ export default function Contact() {
                   {/* Service, Industry, and Budget */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                      <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Service Required</label>
+                      <label className="block text-xs font-black text-zinc-400 uppercase tracking-widest mb-2">Service Required</label>
                       <select
                         name="service_type"
                         value={formData.service_type}
                         onChange={handleChange}
-                        className="glass-input cursor-pointer"
+                        className="glass-input cursor-pointer bg-zinc-900/50 text-white"
                       >
-                        <option value="E-Commerce Website Development" className="bg-slate-900 text-white">E-Commerce Website Development</option>
-                        <option value="Commercial Website Development" className="bg-slate-900 text-white">Commercial Website Development</option>
+                        {services.map((service) => (
+                          <option key={service} value={service} className="bg-zinc-950 text-white font-semibold">
+                            {service}
+                          </option>
+                        ))}
                       </select>
                     </div>
                     <div>
-                      <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Business Sector</label>
+                      <label className="block text-xs font-black text-zinc-400 uppercase tracking-widest mb-2">Business Sector</label>
                       <select
                         name="business_type"
                         value={formData.business_type}
                         onChange={handleChange}
-                        className="glass-input cursor-pointer"
+                        className="glass-input cursor-pointer bg-zinc-900/50 text-white"
                       >
                         {businessTypes.map((type) => (
-                          <option key={type} value={type} className="bg-slate-900 text-white">{type}</option>
+                          <option key={type} value={type} className="bg-zinc-950 text-white font-semibold">{type}</option>
                         ))}
                       </select>
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Estimated Budget (INR)</label>
+                    <label className="block text-xs font-black text-zinc-400 uppercase tracking-widest mb-2">Estimated Budget (INR)</label>
                     <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
                       {budgets.map((b) => (
                         <button
                           key={b}
                           type="button"
                           onClick={() => setFormData({ ...formData, budget: b })}
-                          className={`px-3 py-2 text-xs font-semibold rounded-xl border transition-all duration-200 cursor-pointer ${
+                          className={`px-3 py-2.5 text-xs font-black rounded-xl border transition-all duration-200 cursor-pointer ${
                             formData.budget === b 
-                              ? 'border-brand-primary bg-brand-primary/10 text-white shadow-glow' 
-                              : 'border-white/10 bg-white/5 text-slate-400 hover:border-white/20'
+                              ? 'border-brand-primary bg-brand-primary/10 text-white shadow-sm' 
+                              : 'border-white/10 bg-zinc-900/50 text-zinc-400 hover:border-zinc-700 hover:bg-zinc-900'
                           }`}
                         >
                           {b}
@@ -280,7 +291,7 @@ export default function Contact() {
 
                   <div className="grid grid-cols-1 gap-6">
                     <div>
-                      <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Subject</label>
+                      <label className="block text-xs font-black text-zinc-400 uppercase tracking-widest mb-2">Subject</label>
                       <input
                         type="text"
                         name="subject"
@@ -292,7 +303,7 @@ export default function Contact() {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Project Brief / Message *</label>
+                    <label className="block text-xs font-black text-zinc-400 uppercase tracking-widest mb-2">Project Brief / Message *</label>
                     <textarea
                       name="message"
                       rows="4"
@@ -309,7 +320,7 @@ export default function Contact() {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="btn-primary w-full py-4 uppercase font-bold text-sm tracking-wider"
+                    className="btn-primary w-full py-4 uppercase font-black text-xs tracking-wider"
                   >
                     {isSubmitting ? 'Sending Request...' : 'Send Details & Request Quote'}
                   </button>

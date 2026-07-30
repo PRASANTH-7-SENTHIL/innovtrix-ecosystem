@@ -14,7 +14,9 @@
 
 @layer base {
   body {
-    @apply font-sans transition-colors duration-300;
+    @apply font-sans bg-[#050505] text-zinc-100 transition-colors duration-300;
+    background-image: radial-gradient(circle at 50% 0%, rgba(255, 186, 0, 0.05) 0%, transparent 60%);
+    background-attachment: fixed;
   }
   
   /* Custom scrollbar for premium feel */
@@ -22,41 +24,122 @@
     width: 8px;
   }
   ::-webkit-scrollbar-track {
-    @apply bg-slate-900;
+    @apply bg-zinc-950;
   }
   ::-webkit-scrollbar-thumb {
-    @apply bg-slate-700 rounded-full hover:bg-brand-primary;
+    @apply bg-zinc-800 rounded-full hover:bg-brand-primary;
   }
 }
 
 @layer components {
-  /* Glassmorphism Cards */
+  /* Glassmorphism Cards for Dark theme */
   .glass-card {
-    @apply backdrop-blur-md bg-white/10 dark:bg-slate-900/40 border border-white/10 dark:border-white/5 shadow-glass-light dark:shadow-glass-dark rounded-2xl;
+    @apply backdrop-blur-md bg-zinc-900/40 border border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.3)] rounded-2xl;
   }
   
   .glass-card-hover {
-    @apply transition-all duration-300 hover:shadow-glow hover:-translate-y-1 hover:border-brand-primary/30;
+    @apply transition-all duration-350 hover:shadow-[0_15px_30px_rgba(255,186,0,0.1)] hover:-translate-y-1 hover:border-brand-primary/50;
+  }
+
+  /* Premium Cards */
+  .premium-card {
+    @apply bg-zinc-950/80 border border-white/5 rounded-3xl shadow-[0_4px_30px_rgba(0,0,0,0.4)] transition-all duration-500 backdrop-blur-sm;
+  }
+
+  .premium-card-hover {
+    @apply hover:shadow-[0_20px_50px_rgba(255,186,0,0.15)] hover:border-brand-primary/50 hover:-translate-y-1.5;
   }
 
   /* Glass Input */
   .glass-input {
-    @apply w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-slate-800 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all duration-200;
+    @apply w-full px-4 py-3 bg-zinc-900/50 border border-white/10 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all duration-200;
   }
   
   /* Premium Buttons */
   .btn-primary {
-    @apply px-6 py-3 bg-gradient-to-r from-brand-primary to-brand-secondary text-white font-medium rounded-xl shadow-glow hover:opacity-90 active:scale-95 transition-all duration-200 cursor-pointer flex items-center justify-center gap-2;
+    @apply px-6 py-3 bg-[#FFBA00] hover:bg-white text-black hover:text-black border border-[#FFBA00] hover:border-white font-black uppercase tracking-wider text-xs rounded-xl shadow-md hover:shadow-[0_0_20px_rgba(255,186,0,0.4)] active:scale-95 transition-all duration-200 cursor-pointer flex items-center justify-center gap-2;
   }
   
   .btn-secondary {
-    @apply px-6 py-3 bg-slate-800/80 hover:bg-slate-700/80 border border-white/10 text-white font-medium rounded-xl hover:-translate-y-0.5 active:scale-95 transition-all duration-200 cursor-pointer flex items-center justify-center gap-2;
+    @apply px-6 py-3 bg-zinc-900 hover:bg-zinc-800 border border-white/15 text-white hover:border-white font-bold text-xs uppercase tracking-wider rounded-xl hover:-translate-y-0.5 active:scale-95 transition-all duration-200 cursor-pointer flex items-center justify-center gap-2;
   }
 
   /* Glowing background patterns */
   .glow-bg {
-    @apply absolute w-[500px] h-[500px] rounded-full blur-[120px] pointer-events-none opacity-20 dark:opacity-30;
+    @apply absolute w-[600px] h-[600px] rounded-full blur-[150px] pointer-events-none;
   }
+}
+
+/* Dark Grid Background Pattern - Subtle Grey Grid lines */
+.bg-grid-pattern {
+  background-image: linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 80px 80px;
+}
+
+/* Multi-color Glow Utility Classes for Cards */
+.glow-gold:hover {
+  border-color: rgba(255, 186, 0, 0.65) !important;
+  box-shadow: 0 15px 45px rgba(255, 186, 0, 0.25), 0 0 25px rgba(255, 186, 0, 0.12) !important;
+  transform: translateY(-8px) scale(1.01);
+}
+.glow-emerald:hover {
+  border-color: rgba(16, 185, 129, 0.5) !important;
+  box-shadow: 0 10px 40px rgba(16, 185, 129, 0.15), 0 0 20px rgba(16, 185, 129, 0.08) !important;
+  transform: translateY(-6px);
+}
+.glow-cyan:hover {
+  border-color: rgba(6, 182, 212, 0.5) !important;
+  box-shadow: 0 10px 40px rgba(6, 182, 212, 0.15), 0 0 20px rgba(6, 182, 212, 0.08) !important;
+  transform: translateY(-6px);
+}
+.glow-purple:hover {
+  border-color: rgba(139, 92, 246, 0.5) !important;
+  box-shadow: 0 10px 40px rgba(139, 92, 246, 0.15), 0 0 20px rgba(139, 92, 246, 0.08) !important;
+  transform: translateY(-6px);
+}
+.glow-orange:hover {
+  border-color: rgba(249, 115, 22, 0.5) !important;
+  box-shadow: 0 10px 40px rgba(249, 115, 22, 0.15), 0 0 20px rgba(249, 115, 22, 0.08) !important;
+  transform: translateY(-6px);
+}
+.glow-teal:hover {
+  border-color: rgba(20, 184, 166, 0.5) !important;
+  box-shadow: 0 10px 40px rgba(20, 184, 166, 0.15), 0 0 20px rgba(20, 184, 166, 0.08) !important;
+  transform: translateY(-6px);
+}
+.glow-rose:hover {
+  border-color: rgba(244, 63, 94, 0.5) !important;
+  box-shadow: 0 10px 40px rgba(244, 63, 94, 0.15), 0 0 20px rgba(244, 63, 94, 0.08) !important;
+  transform: translateY(-6px);
+}
+.glow-silver:hover {
+  border-color: rgba(200, 200, 200, 0.5) !important;
+  box-shadow: 0 10px 40px rgba(255, 255, 255, 0.1), 0 0 20px rgba(255, 255, 255, 0.05) !important;
+  transform: translateY(-6px);
+}
+
+/* Lanyard string, clip & cards animations */
+@keyframes dropBounce {
+  0% { transform: translateY(-300px) rotate(-3deg); opacity: 0; }
+  50% { transform: translateY(0) rotate(-3deg); opacity: 1; }
+  65% { transform: translateY(-40px) rotate(-5deg); opacity: 1; }
+  80% { transform: translateY(0) rotate(-2deg); opacity: 1; }
+  90% { transform: translateY(-15px) rotate(-3deg); opacity: 1; }
+  100% { transform: translateY(0) rotate(-3deg); opacity: 1; }
+}
+
+.animate-drop-bounce {
+  animation: dropBounce 1.2s cubic-bezier(0.28, 0.84, 0.42, 1) forwards;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
 }
 
 /* Custom styles for Swiper pagination */
@@ -84,3 +167,4 @@ html.lenis {
 .lenis.lenis-scrolling iframe {
   pointer-events: none;
 }
+

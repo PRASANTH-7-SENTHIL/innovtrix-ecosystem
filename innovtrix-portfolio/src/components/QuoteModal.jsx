@@ -8,7 +8,7 @@ export default function QuoteModal({ isOpen, onClose }) {
     phone: '',
     company_name: '',
     business_type: 'Retail Shops',
-    service_type: 'E-Commerce Website Development',
+    service_type: 'Business & Commercial Websites',
     budget: '$5,000 - $10,000',
     details: ''
   })
@@ -35,6 +35,17 @@ export default function QuoteModal({ isOpen, onClose }) {
     '$50,000+'
   ]
 
+  const services = [
+    'Business & Commercial Websites',
+    'Industry-Specific Websites',
+    'E-Commerce Development',
+    'SaaS Application Development',
+    'IoT Applications & Smart Solutions',
+    'Cloud Deployment & Monitoring',
+    'AI & Automation Solutions',
+    'Custom Web Applications'
+  ]
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
   }
@@ -45,7 +56,7 @@ export default function QuoteModal({ isOpen, onClose }) {
     setErrorMsg('')
     
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/api/quotes`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://innovtrix-ecosystem-nine.vercel.app'}/api/quotes`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -70,17 +81,15 @@ export default function QuoteModal({ isOpen, onClose }) {
           phone: '',
           company_name: '',
           business_type: 'Retail Shops',
-          service_type: 'E-Commerce Website Development',
+          service_type: 'Business & Commercial Websites',
           budget: '$5,000 - $10,000',
           details: ''
         })
       } else {
-        // Fallback for standalone/local client-only demo
         throw new Error('API server offline')
       }
     } catch (error) {
       console.warn('Backend API offline, executing successful local simulation.', error)
-      // Standard UX fallback simulation
       setTimeout(() => {
         setIsSuccess(true)
         setIsSubmitting(false)
@@ -91,13 +100,13 @@ export default function QuoteModal({ isOpen, onClose }) {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
-      <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto glass-card p-8 border border-white/10 shadow-2xl bg-slate-900/90">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-sm">
+      <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto bg-zinc-950 p-8 border border-white/10 shadow-2xl rounded-[2rem] text-zinc-100">
         
         {/* Close Button */}
         <button 
           onClick={onClose}
-          className="absolute top-6 right-6 p-2 rounded-xl bg-white/5 border border-white/10 text-slate-400 hover:text-white transition-colors"
+          className="absolute top-6 right-6 p-2 rounded-xl bg-zinc-900 border border-white/10 text-zinc-400 hover:text-white transition-colors cursor-pointer"
         >
           <IoClose size={20} />
         </button>
@@ -107,8 +116,8 @@ export default function QuoteModal({ isOpen, onClose }) {
             <div className="w-16 h-16 bg-brand-primary/20 text-brand-primary border border-brand-primary/30 rounded-full flex items-center justify-center mx-auto mb-6 text-2xl">
               ✓
             </div>
-            <h3 className="text-2xl font-bold text-white mb-2">Quote Requested!</h3>
-            <p className="text-slate-400 max-w-md mx-auto mb-8">
+            <h3 className="text-2xl font-black text-white mb-2 uppercase">Quote Requested!</h3>
+            <p className="text-zinc-400 max-w-md mx-auto mb-8 font-semibold">
               Thank you for choosing Innovtrix. Our development leads will review your business needs and contact you within 24 hours.
             </p>
             <button 
@@ -121,9 +130,9 @@ export default function QuoteModal({ isOpen, onClose }) {
         ) : (
           <>
             <div className="mb-8">
-              <span className="text-xs font-semibold tracking-wider text-brand-primary uppercase">INNOVTRIX PARTNERSHIP</span>
-              <h2 className="text-2xl font-bold text-white mt-1">Request a Project Quote</h2>
-              <p className="text-slate-400 text-sm mt-1">
+              <span className="text-xs font-black tracking-widest text-brand-primary uppercase">INNOVTRIX PARTNERSHIP</span>
+              <h2 className="text-2xl font-black text-white mt-1 uppercase">Request a Project Quote</h2>
+              <p className="text-zinc-400 text-sm mt-1 font-semibold">
                 Tell us about your project requirements and receive a comprehensive price proposal.
               </p>
             </div>
@@ -131,7 +140,7 @@ export default function QuoteModal({ isOpen, onClose }) {
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Your Name *</label>
+                  <label className="block text-xs font-black text-zinc-400 uppercase tracking-widest mb-2">Your Name *</label>
                   <input
                     type="text"
                     name="name"
@@ -143,7 +152,7 @@ export default function QuoteModal({ isOpen, onClose }) {
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Email Address *</label>
+                  <label className="block text-xs font-black text-zinc-400 uppercase tracking-widest mb-2">Email Address *</label>
                   <input
                     type="email"
                     name="email"
@@ -158,7 +167,7 @@ export default function QuoteModal({ isOpen, onClose }) {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Phone Number *</label>
+                  <label className="block text-xs font-black text-zinc-400 uppercase tracking-widest mb-2">Phone Number *</label>
                   <input
                     type="tel"
                     name="phone"
@@ -170,7 +179,7 @@ export default function QuoteModal({ isOpen, onClose }) {
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Company Name *</label>
+                  <label className="block text-xs font-black text-zinc-400 uppercase tracking-widest mb-2">Company Name *</label>
                   <input
                     type="text"
                     name="company_name"
@@ -185,7 +194,7 @@ export default function QuoteModal({ isOpen, onClose }) {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Business Type</label>
+                  <label className="block text-xs font-black text-zinc-400 uppercase tracking-widest mb-2">Business Type</label>
                   <select
                     name="business_type"
                     value={formData.business_type}
@@ -193,36 +202,39 @@ export default function QuoteModal({ isOpen, onClose }) {
                     className="glass-input cursor-pointer"
                   >
                     {businessTypes.map((type) => (
-                      <option key={type} value={type} className="bg-slate-900 text-white">{type}</option>
+                      <option key={type} value={type} className="bg-zinc-900 text-white font-semibold">{type}</option>
                     ))}
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Service Required</label>
+                  <label className="block text-xs font-black text-zinc-400 uppercase tracking-widest mb-2">Service Required</label>
                   <select
                     name="service_type"
                     value={formData.service_type}
                     onChange={handleChange}
                     className="glass-input cursor-pointer"
                   >
-                    <option value="E-Commerce Website Development" className="bg-slate-900 text-white">E-Commerce Website Development</option>
-                    <option value="Commercial Website Development" className="bg-slate-900 text-white">Commercial Website Development</option>
+                    {services.map((service) => (
+                      <option key={service} value={service} className="bg-zinc-900 text-white font-semibold">
+                        {service}
+                      </option>
+                    ))}
                   </select>
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Estimated Budget Range</label>
+                <label className="block text-xs font-black text-zinc-400 uppercase tracking-widest mb-2">Estimated Budget Range</label>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                   {budgets.map((b) => (
                     <button
                       key={b}
                       type="button"
                       onClick={() => setFormData({ ...formData, budget: b })}
-                      className={`px-4 py-2 text-xs font-medium rounded-xl border transition-all duration-200 cursor-pointer ${
+                      className={`px-4 py-2.5 text-xs font-bold rounded-xl border transition-all duration-200 cursor-pointer ${
                         formData.budget === b 
-                          ? 'border-brand-primary bg-brand-primary/10 text-white shadow-glow' 
-                          : 'border-white/10 bg-white/5 text-slate-400 hover:border-white/20'
+                          ? 'border-brand-primary bg-brand-primary/10 text-white shadow-sm font-black' 
+                          : 'border-white/10 bg-zinc-900/50 text-zinc-400 hover:border-zinc-700 hover:bg-zinc-900'
                       }`}
                     >
                       {b}
@@ -232,7 +244,7 @@ export default function QuoteModal({ isOpen, onClose }) {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Project Notes / Requirements</label>
+                <label className="block text-xs font-black text-zinc-400 uppercase tracking-widest mb-2">Project Notes / Requirements</label>
                 <textarea
                   name="details"
                   rows="4"
@@ -248,7 +260,7 @@ export default function QuoteModal({ isOpen, onClose }) {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="btn-primary w-full py-4 text-base tracking-wide uppercase font-semibold mt-2"
+                className="btn-primary w-full py-4 text-sm tracking-widest uppercase font-black mt-2"
               >
                 {isSubmitting ? 'Sending Request...' : 'Submit Quote Request'}
               </button>
@@ -259,3 +271,4 @@ export default function QuoteModal({ isOpen, onClose }) {
     </div>
   )
 }
+

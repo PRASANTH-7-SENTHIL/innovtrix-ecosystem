@@ -45,12 +45,13 @@ export default function DashboardOverview() {
       try {
         const token = localStorage.getItem('admin_token')
         const headers = { 'Authorization': `Bearer ${token}` }
+        const currentApiUrl = localStorage.getItem('backend_url') || import.meta.env.VITE_API_URL || 'https://innovtrix-ecosystem-nine.vercel.app'
         
         const [quotesRes, projectsRes, invoicesRes, paymentsRes] = await Promise.all([
-          fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/api/quotes`, { headers }),
-          fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/api/projects`, { headers }),
-          fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/api/invoices`, { headers }),
-          fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/api/payments`, { headers })
+          fetch(`${currentApiUrl}/api/quotes`, { headers }),
+          fetch(`${currentApiUrl}/api/projects`, { headers }),
+          fetch(`${currentApiUrl}/api/invoices`, { headers }),
+          fetch(`${currentApiUrl}/api/payments`, { headers })
         ])
 
         const quotes = quotesRes.ok ? await quotesRes.json() : []
@@ -151,9 +152,9 @@ export default function DashboardOverview() {
       {
         label: 'Monthly Revenue (₹)',
         data: monthlyRevenueData,
-        backgroundColor: 'rgba(59, 130, 246, 0.8)',
-        borderColor: '#3B82F6',
-        borderWidth: 1,
+        backgroundColor: 'rgba(255, 186, 0, 0.25)',
+        borderColor: '#FFBA00',
+        borderWidth: 1.5,
         borderRadius: 6
       }
     ]
@@ -165,7 +166,7 @@ export default function DashboardOverview() {
     datasets: [
       {
         data: buildsDistribution,
-        backgroundColor: ['#3B82F6', '#06B6D4'],
+        backgroundColor: ['#FFBA00', '#FACC15'],
         borderWidth: 0
       }
     ]
@@ -197,7 +198,7 @@ export default function DashboardOverview() {
     <div className="space-y-8 font-sans">
       
       {/* Top Header Row */}
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h1 className="text-2xl font-bold text-white">Dashboard Overview</h1>
           <p className="text-slate-500 text-xs mt-1">Real-time statistics for Innovtrix operations.</p>
@@ -211,7 +212,7 @@ export default function DashboardOverview() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {/* Metric 1 */}
         <div className="dash-card flex items-center space-x-4">
-          <div className="p-3 bg-blue-500/10 text-blue-500 border border-blue-500/20 rounded-xl">
+          <div className="p-3 bg-brand-primary/10 text-brand-primary border border-brand-primary/20 rounded-xl">
             <FiUsers size={22} />
           </div>
           <div>
@@ -222,7 +223,7 @@ export default function DashboardOverview() {
 
         {/* Metric 2 */}
         <div className="dash-card flex items-center space-x-4">
-          <div className="p-3 bg-cyan-500/10 text-cyan-500 border border-cyan-500/20 rounded-xl">
+          <div className="p-3 bg-brand-accent/10 text-brand-accent border border-brand-accent/20 rounded-xl">
             <FiShoppingBag size={22} />
           </div>
           <div>
@@ -233,7 +234,7 @@ export default function DashboardOverview() {
 
         {/* Metric 3 */}
         <div className="dash-card flex items-center space-x-4">
-          <div className="p-3 bg-indigo-500/10 text-indigo-500 border border-indigo-500/20 rounded-xl">
+          <div className="p-3 bg-white/5 text-white border border-white/10 rounded-xl">
             <FiLayers size={22} />
           </div>
           <div>

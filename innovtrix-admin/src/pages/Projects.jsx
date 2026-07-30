@@ -11,7 +11,8 @@ export default function Projects() {
     const fetchProjects = async () => {
       try {
         const token = localStorage.getItem('admin_token')
-        const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/api/projects`, {
+        const currentApiUrl = localStorage.getItem('backend_url') || import.meta.env.VITE_API_URL || 'https://innovtrix-ecosystem-nine.vercel.app'
+        const response = await fetch(`${currentApiUrl}/api/projects`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -60,7 +61,8 @@ export default function Projects() {
   const handleUpdateProject = async (updatedProj) => {
     try {
       const token = localStorage.getItem('admin_token')
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/api/projects/${updatedProj.id}`, {
+      const currentApiUrl = localStorage.getItem('backend_url') || import.meta.env.VITE_API_URL || 'https://innovtrix-ecosystem-nine.vercel.app'
+      const response = await fetch(`${currentApiUrl}/api/projects/${updatedProj.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -111,7 +113,8 @@ export default function Projects() {
 
     try {
       const token = localStorage.getItem('admin_token')
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/api/projects/${pId}`, {
+      const currentApiUrl = localStorage.getItem('backend_url') || import.meta.env.VITE_API_URL || 'https://innovtrix-ecosystem-nine.vercel.app'
+      const response = await fetch(`${currentApiUrl}/api/projects/${pId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -143,7 +146,7 @@ export default function Projects() {
     <div className="space-y-8 font-sans">
       
       {/* Module Title */}
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h1 className="text-2xl font-bold text-white">Active Projects</h1>
           <p className="text-slate-500 text-xs mt-1">Track codebase assembly progress and milestone fulfillment.</p>
