@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { FiGrid, FiPlus, FiEdit2, FiTrash2, FiExternalLink, FiX, FiCheck, FiInfo } from 'react-icons/fi'
+import { adminApiFetch } from '../utils/api'
 
 export default function Portfolio() {
   const [projects, setProjects] = useState([])
@@ -25,8 +26,8 @@ export default function Portfolio() {
   const fetchProjects = async () => {
     try {
       setLoading(true)
-      const currentApiUrl = localStorage.getItem('backend_url') || import.meta.env.VITE_API_URL || 'https://innovtrix-ecosystem-nine.vercel.app'
-      const response = await fetch(`${currentApiUrl}/api/portfolio`)
+      setError('')
+      const response = await adminApiFetch('/api/portfolio')
       if (response.ok) {
         const data = await response.json()
         setProjects(data)
@@ -81,15 +82,11 @@ export default function Portfolio() {
     setSuccess('')
 
     const token = localStorage.getItem('admin_token')
-    const currentApiUrl = localStorage.getItem('backend_url') || import.meta.env.VITE_API_URL || 'https://innovtrix-ecosystem-nine.vercel.app'
-    const url = editingId 
-      ? `${currentApiUrl}/api/portfolio/${editingId}`
-      : `${currentApiUrl}/api/portfolio`
-    
+    const endpoint = editingId ? `/api/portfolio/${editingId}` : '/api/portfolio'
     const method = editingId ? 'PUT' : 'POST'
 
     try {
-      const response = await fetch(url, {
+      const response = await adminApiFetch(endpoint, {
         method: method,
         headers: {
           'Content-Type': 'application/json',
@@ -121,8 +118,7 @@ export default function Portfolio() {
 
     const token = localStorage.getItem('admin_token')
     try {
-      const currentApiUrl = localStorage.getItem('backend_url') || import.meta.env.VITE_API_URL || 'https://innovtrix-ecosystem-nine.vercel.app'
-      const response = await fetch(`${currentApiUrl}/api/portfolio/${id}`, {
+      const response = await adminApiFetch(`/api/portfolio/${id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`

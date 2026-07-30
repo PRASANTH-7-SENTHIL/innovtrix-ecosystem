@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { FiEdit2, FiCheck, FiX, FiShoppingBag } from 'react-icons/fi'
+import { adminApiFetch } from '../utils/api'
 
 export default function Orders() {
   const [selectedOrder, setSelectedOrder] = useState(null)
@@ -10,8 +11,7 @@ export default function Orders() {
     const fetchOrders = async () => {
       try {
         const token = localStorage.getItem('admin_token')
-        const currentApiUrl = localStorage.getItem('backend_url') || import.meta.env.VITE_API_URL || 'https://innovtrix-ecosystem-nine.vercel.app'
-        const response = await fetch(`${currentApiUrl}/api/orders`, {
+        const response = await adminApiFetch('/api/orders', {
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -41,8 +41,7 @@ export default function Orders() {
   const handleUpdateStatus = async (updatedOrder) => {
     try {
       const token = localStorage.getItem('admin_token')
-      const currentApiUrl = localStorage.getItem('backend_url') || import.meta.env.VITE_API_URL || 'https://innovtrix-ecosystem-nine.vercel.app'
-      const response = await fetch(`${currentApiUrl}/api/orders/${updatedOrder.id}`, {
+      const response = await adminApiFetch(`/api/orders/${updatedOrder.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

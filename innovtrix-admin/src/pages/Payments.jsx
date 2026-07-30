@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { adminApiFetch } from '../utils/api'
 
 export default function Payments() {
   const [payments, setPayments] = useState([])
@@ -8,8 +9,7 @@ export default function Payments() {
     const fetchPayments = async () => {
       try {
         const token = localStorage.getItem('admin_token')
-        const currentApiUrl = localStorage.getItem('backend_url') || import.meta.env.VITE_API_URL || 'https://innovtrix-ecosystem-nine.vercel.app'
-        const response = await fetch(`${currentApiUrl}/api/payments`, {
+        const response = await adminApiFetch('/api/payments', {
           headers: {
             'Authorization': `Bearer ${token}`
           }

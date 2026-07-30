@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { adminApiFetch } from '../utils/api'
 
 export default function Login({ onLoginSuccess }) {
   const [email, setEmail] = useState('')
@@ -13,8 +14,7 @@ export default function Login({ onLoginSuccess }) {
 
     // Attempt real API request first
     try {
-      const currentApiUrl = localStorage.getItem('backend_url') || import.meta.env.VITE_API_URL || 'https://innovtrix-ecosystem-nine.vercel.app'
-      const response = await fetch(`${currentApiUrl}/api/auth/login`, {
+      const response = await adminApiFetch('/api/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',

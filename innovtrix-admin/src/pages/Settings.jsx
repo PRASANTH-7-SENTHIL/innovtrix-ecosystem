@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { FiSave, FiSettings, FiDatabase, FiTrendingUp, FiUsers, FiLock, FiInfo, FiCheck } from 'react-icons/fi'
+import { adminApiFetch } from '../utils/api'
 
 export default function Settings() {
   const [profile, setProfile] = useState({
@@ -46,8 +47,7 @@ export default function Settings() {
     const fetchSettings = async () => {
       try {
         setLoading(true)
-        const currentApiUrl = localStorage.getItem('backend_url') || import.meta.env.VITE_API_URL || 'https://innovtrix-ecosystem-nine.vercel.app'
-        const response = await fetch(`${currentApiUrl}/api/settings`)
+        const response = await adminApiFetch('/api/settings')
         if (response.ok) {
           const data = await response.json()
           if (data.stats) {
@@ -81,9 +81,8 @@ export default function Settings() {
     setSuccess('')
     
     const token = localStorage.getItem('admin_token')
-    const currentApiUrl = localStorage.getItem('backend_url') || import.meta.env.VITE_API_URL || 'https://innovtrix-ecosystem-nine.vercel.app'
     try {
-      const statsRes = await fetch(`${currentApiUrl}/api/settings/stats`, {
+      const statsRes = await adminApiFetch('/api/settings/stats', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -110,9 +109,8 @@ export default function Settings() {
     setSuccess('')
     
     const token = localStorage.getItem('admin_token')
-    const currentApiUrl = localStorage.getItem('backend_url') || import.meta.env.VITE_API_URL || 'https://innovtrix-ecosystem-nine.vercel.app'
     try {
-      const foundersRes = await fetch(`${currentApiUrl}/api/settings/founders`, {
+      const foundersRes = await adminApiFetch('/api/settings/founders', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

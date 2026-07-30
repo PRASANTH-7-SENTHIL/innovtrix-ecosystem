@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { FiUsers, FiShoppingBag, FiLayers, FiDollarSign, FiActivity } from 'react-icons/fi'
 import { Bar, Doughnut } from 'react-chartjs-2'
+import { adminApiFetch } from '../utils/api'
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -45,13 +46,12 @@ export default function DashboardOverview() {
       try {
         const token = localStorage.getItem('admin_token')
         const headers = { 'Authorization': `Bearer ${token}` }
-        const currentApiUrl = localStorage.getItem('backend_url') || import.meta.env.VITE_API_URL || 'https://innovtrix-ecosystem-nine.vercel.app'
         
         const [quotesRes, projectsRes, invoicesRes, paymentsRes] = await Promise.all([
-          fetch(`${currentApiUrl}/api/quotes`, { headers }),
-          fetch(`${currentApiUrl}/api/projects`, { headers }),
-          fetch(`${currentApiUrl}/api/invoices`, { headers }),
-          fetch(`${currentApiUrl}/api/payments`, { headers })
+          adminApiFetch('/api/quotes', { headers }),
+          adminApiFetch('/api/projects', { headers }),
+          adminApiFetch('/api/invoices', { headers }),
+          adminApiFetch('/api/payments', { headers })
         ])
 
         const quotes = quotesRes.ok ? await quotesRes.json() : []

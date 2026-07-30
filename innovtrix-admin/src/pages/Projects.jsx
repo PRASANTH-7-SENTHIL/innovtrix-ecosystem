@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { FiBriefcase, FiEdit2, FiCheck, FiX, FiPlus, FiTrash2 } from 'react-icons/fi'
+import { adminApiFetch } from '../utils/api'
 
 export default function Projects() {
   const [selectedProject, setSelectedProject] = useState(null)
@@ -11,8 +12,7 @@ export default function Projects() {
     const fetchProjects = async () => {
       try {
         const token = localStorage.getItem('admin_token')
-        const currentApiUrl = localStorage.getItem('backend_url') || import.meta.env.VITE_API_URL || 'https://innovtrix-ecosystem-nine.vercel.app'
-        const response = await fetch(`${currentApiUrl}/api/projects`, {
+        const response = await adminApiFetch('/api/projects', {
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -61,8 +61,7 @@ export default function Projects() {
   const handleUpdateProject = async (updatedProj) => {
     try {
       const token = localStorage.getItem('admin_token')
-      const currentApiUrl = localStorage.getItem('backend_url') || import.meta.env.VITE_API_URL || 'https://innovtrix-ecosystem-nine.vercel.app'
-      const response = await fetch(`${currentApiUrl}/api/projects/${updatedProj.id}`, {
+      const response = await adminApiFetch(`/api/projects/${updatedProj.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -113,8 +112,7 @@ export default function Projects() {
 
     try {
       const token = localStorage.getItem('admin_token')
-      const currentApiUrl = localStorage.getItem('backend_url') || import.meta.env.VITE_API_URL || 'https://innovtrix-ecosystem-nine.vercel.app'
-      const response = await fetch(`${currentApiUrl}/api/projects/${pId}`, {
+      const response = await adminApiFetch(`/api/projects/${pId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

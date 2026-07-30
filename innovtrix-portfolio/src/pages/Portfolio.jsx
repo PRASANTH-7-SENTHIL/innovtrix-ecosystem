@@ -64,7 +64,7 @@ export default function Portfolio() {
   useEffect(() => {
     const loadProjects = async () => {
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://innovtrix-ecosystem-nine.vercel.app'}/api/portfolio`)
+        const response = await apiFetch('/api/portfolio')
         if (response.ok) {
           const data = await response.json()
           if (data && data.length > 0) {

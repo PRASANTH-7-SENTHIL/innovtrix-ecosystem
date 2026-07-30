@@ -66,7 +66,7 @@ export default function About() {
   useEffect(() => {
     const fetchFounders = async () => {
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://innovtrix-ecosystem-nine.vercel.app'}/api/settings/founders`)
+        const response = await apiFetch('/api/settings/founders')
         if (response.ok) {
           const data = await response.json()
           if (data && data.value) {

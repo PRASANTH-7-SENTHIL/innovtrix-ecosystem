@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { motion, useScroll, useSpring, useMotionValueEvent } from 'framer-motion'
 import { gsap } from 'gsap'
 import { FiArrowRight, FiGlobe, FiShoppingBag, FiSmartphone, FiCpu, FiCheck } from 'react-icons/fi'
+import { apiFetch } from '../utils/api'
 
 const TagCard = ({ number, title, tag, text, className, aosDelay, aosType, pathLength, containerRef }) => {
   const ref = useRef(null);
@@ -239,7 +240,7 @@ export default function Home() {
 
     const fetchStats = async () => {
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://innovtrix-ecosystem-nine.vercel.app'}/api/settings/stats`)
+        const response = await apiFetch('/api/settings/stats')
         if (response.ok) {
           const data = await response.json()
           if (data && data.value) {
@@ -247,7 +248,7 @@ export default function Home() {
           }
         }
       } catch (err) {
-        console.warn('Failed to query statistics setting from backend, displaying defaults.', err)
+        console.error(err)
       }
     }
     fetchStats()

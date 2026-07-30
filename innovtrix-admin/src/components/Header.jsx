@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { FiBell, FiSearch, FiLogOut, FiUser, FiMenu } from 'react-icons/fi'
+import { adminApiFetch } from '../utils/api'
 
 export default function Header({ onLogout, onToggleSidebar }) {
   const [adminEmail, setAdminEmail] = useState('innovtrix30@gmail.com')
@@ -9,8 +10,7 @@ export default function Header({ onLogout, onToggleSidebar }) {
   const fetchNotifications = async () => {
     try {
       const token = localStorage.getItem('admin_token')
-      const currentApiUrl = localStorage.getItem('backend_url') || import.meta.env.VITE_API_URL || 'https://innovtrix-ecosystem-nine.vercel.app'
-      const response = await fetch(`${currentApiUrl}/api/notifications`, {
+      const response = await adminApiFetch('/api/notifications', {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -43,8 +43,7 @@ export default function Header({ onLogout, onToggleSidebar }) {
   const markAllRead = async () => {
     try {
       const token = localStorage.getItem('admin_token')
-      const currentApiUrl = localStorage.getItem('backend_url') || import.meta.env.VITE_API_URL || 'https://innovtrix-ecosystem-nine.vercel.app'
-      const response = await fetch(`${currentApiUrl}/api/notifications/read-all`, {
+      const response = await adminApiFetch('/api/notifications/read-all', {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`
