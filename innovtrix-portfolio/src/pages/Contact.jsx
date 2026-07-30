@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { FaEnvelope, FaPhoneAlt, FaMapMarkerAlt, FaWhatsapp } from 'react-icons/fa'
+import { apiFetch } from '../utils/api'
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -55,7 +56,8 @@ export default function Contact() {
     setErrorMsg('')
     
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://innovtrix-ecosystem-nine.vercel.app'}/api/contact`, {
+      // 1. Submit to Contact Messages endpoint
+      const contactReq = apiFetch('/api/contact', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -68,8 +70,29 @@ export default function Contact() {
           message: `Company: ${formData.company_name || 'N/A'}\nBusiness Sector: ${formData.business_type}\nService Required: ${formData.service_type}\nEstimated Budget: ${formData.budget}\n\nMessage:\n${formData.message}`
         }),
       })
-      
-      if (response.ok) {
+
+      // 2. Also submit to Quotes endpoint so it appears in Admin Leads
+      const quoteReq = apiFetch('/api/quotes', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          company: formData.company_name,
+          business_type: formData.business_type,
+          service_type: formData.service_type,
+          budget: formData.budget,
+          details: formData.message || `Subject: ${formData.subject}`
+        }),
+      })
+
+      const results = await Promise.allSettled([contactReq, quoteReq])
+      const hasSuccess = results.some(r => r.status === 'fulfilled')
+
+      if (hasSuccess) {
         setIsSuccess(true)
         setFormData({
           name: '',
@@ -83,17 +106,14 @@ export default function Contact() {
           message: ''
         })
       } else {
-        throw new Error('API server offline')
+        throw new Error('Backend failed to process request')
       }
     } catch (error) {
-      console.warn('Backend API offline, executing successful local simulation.', error)
-      setTimeout(() => {
-        setIsSuccess(true)
-        setIsSubmitting(false)
-      }, 1000)
-      return
+      console.error('Submission failed:', error)
+      setErrorMsg('Failed to send details to server. Please try again.')
+    } finally {
+      setIsSubmitting(false)
     }
-    setIsSubmitting(false)
   }
 
   return (

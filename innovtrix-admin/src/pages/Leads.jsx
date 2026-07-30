@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { FiEdit2, FiCheck, FiX, FiUsers } from 'react-icons/fi'
+import { adminApiFetch } from '../utils/api'
 
 export default function Leads() {
   const [leads, setLeads] = useState([])
@@ -13,8 +14,7 @@ export default function Leads() {
     const fetchLeads = async () => {
       try {
         const token = localStorage.getItem('admin_token')
-        const currentApiUrl = localStorage.getItem('backend_url') || import.meta.env.VITE_API_URL || 'https://innovtrix-ecosystem-nine.vercel.app'
-        const response = await fetch(`${currentApiUrl}/api/quotes`, {
+        const response = await adminApiFetch('/api/quotes', {
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -22,8 +22,6 @@ export default function Leads() {
         if (response.ok) {
           const data = await response.json()
           setLeads(data)
-        } else {
-          throw new Error('API server offline or invalid response')
         }
       } catch (err) {
         console.error(err)
@@ -38,8 +36,7 @@ export default function Leads() {
   const handleUpdateLead = async (updatedLead) => {
     try {
       const token = localStorage.getItem('admin_token')
-      const currentApiUrl = localStorage.getItem('backend_url') || import.meta.env.VITE_API_URL || 'https://innovtrix-ecosystem-nine.vercel.app'
-      const response = await fetch(`${currentApiUrl}/api/quotes/${updatedLead.id}`, {
+      const response = await adminApiFetch(`/api/quotes/${updatedLead.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

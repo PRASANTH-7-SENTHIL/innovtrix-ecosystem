@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { FiMail, FiCheck, FiX, FiTrash2 } from 'react-icons/fi'
+import { adminApiFetch } from '../utils/api'
 
 export default function Messages() {
   const [messages, setMessages] = useState([])
@@ -10,8 +11,7 @@ export default function Messages() {
     const fetchMessages = async () => {
       try {
         const token = localStorage.getItem('admin_token')
-        const currentApiUrl = localStorage.getItem('backend_url') || import.meta.env.VITE_API_URL || 'https://innovtrix-ecosystem-nine.vercel.app'
-        const response = await fetch(`${currentApiUrl}/api/contact`, {
+        const response = await adminApiFetch('/api/contact', {
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -19,8 +19,6 @@ export default function Messages() {
         if (response.ok) {
           const data = await response.json()
           setMessages(data)
-        } else {
-          throw new Error('API server offline or invalid response')
         }
       } catch (err) {
         console.error(err)
@@ -35,8 +33,7 @@ export default function Messages() {
   const handleMarkReplied = async (mId) => {
     try {
       const token = localStorage.getItem('admin_token')
-      const currentApiUrl = localStorage.getItem('backend_url') || import.meta.env.VITE_API_URL || 'https://innovtrix-ecosystem-nine.vercel.app'
-      const response = await fetch(`${currentApiUrl}/api/contact/${mId}`, {
+      const response = await adminApiFetch(`/api/contact/${mId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -57,8 +54,7 @@ export default function Messages() {
   const handleDeleteMsg = async (mId) => {
     try {
       const token = localStorage.getItem('admin_token')
-      const currentApiUrl = localStorage.getItem('backend_url') || import.meta.env.VITE_API_URL || 'https://innovtrix-ecosystem-nine.vercel.app'
-      const response = await fetch(`${currentApiUrl}/api/contact/${mId}`, {
+      const response = await adminApiFetch(`/api/contact/${mId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`

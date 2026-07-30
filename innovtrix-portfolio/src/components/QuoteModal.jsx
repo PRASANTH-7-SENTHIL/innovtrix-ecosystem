@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { IoClose } from 'react-icons/io5'
+import { apiFetch } from '../utils/api'
 
 export default function QuoteModal({ isOpen, onClose }) {
   const [formData, setFormData] = useState({
@@ -56,7 +57,7 @@ export default function QuoteModal({ isOpen, onClose }) {
     setErrorMsg('')
     
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://innovtrix-ecosystem-nine.vercel.app'}/api/quotes`, {
+      const quoteReq = apiFetch('/api/quotes', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -72,8 +73,25 @@ export default function QuoteModal({ isOpen, onClose }) {
           details: formData.details
         }),
       })
+
+      const contactReq = apiFetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          subject: `Quote Request: ${formData.service_type}`,
+          message: `Company: ${formData.company_name || 'N/A'}\nBusiness Sector: ${formData.business_type}\nService Required: ${formData.service_type}\nEstimated Budget: ${formData.budget}\n\nDetails:\n${formData.details}`
+        }),
+      })
       
-      if (response.ok) {
+      const results = await Promise.allSettled([quoteReq, contactReq])
+      const hasSuccess = results.some(r => r.status === 'fulfilled')
+
+      if (hasSuccess) {
         setIsSuccess(true)
         setFormData({
           name: '',
@@ -86,17 +104,14 @@ export default function QuoteModal({ isOpen, onClose }) {
           details: ''
         })
       } else {
-        throw new Error('API server offline')
+        throw new Error('Backend server failed to process request')
       }
     } catch (error) {
-      console.warn('Backend API offline, executing successful local simulation.', error)
-      setTimeout(() => {
-        setIsSuccess(true)
-        setIsSubmitting(false)
-      }, 1000)
-      return
+      console.error('Quote request failed:', error)
+      setErrorMsg('Failed to submit quote request. Please try again.')
+    } finally {
+      setIsSubmitting(false)
     }
-    setIsSubmitting(false)
   }
 
   return (
