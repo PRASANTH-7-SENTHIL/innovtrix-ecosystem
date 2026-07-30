@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react'
-import { FiMail, FiCheck, FiX, FiTrash2 } from 'react-icons/fi'
+import { FiMail, FiCheck, FiX, FiTrash2, FiBriefcase } from 'react-icons/fi'
 import { adminApiFetch } from '../utils/api'
 
 export default function Messages() {
   const [messages, setMessages] = useState([])
   const [loading, setLoading] = useState(true)
   const [selectedMsg, setSelectedMsg] = useState(null)
+  const [success, setSuccess] = useState('')
 
   useEffect(() => {
     const fetchMessages = async () => {
@@ -29,6 +30,79 @@ export default function Messages() {
     }
     fetchMessages()
   }, [])
+
+  const handleConvertToActiveProject = async (msg) => {
+    try {
+      const token = localStorage.getItem('admin_token')
+
+      const msgText = msg.message || ''
+      const companyMatch = msgText.match(/Company:\s*(.+)/i)
+      const serviceMatch = msgText.match(/Service Required:\s*(.+)/i)
+      const budgetMatch = msgText.match(/Estimated Budget:\s*(.+)/i)
+
+      const companyName = companyMatch ? companyMatch[1].trim() : 'N/A'
+      const serviceType = serviceMatch ? serviceMatch[1].trim() : 'Business & Commercial Websites'
+      const budgetVal = budgetMatch ? budgetMatch[1].trim() : '₹5,000 - ₹10,000'
+
+      // 1. Post to Leads & Inquiries (/api/quotes)
+      const quoteReq = adminApiFetch('/api/quotes', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          name: msg.name,
+          email: msg.email,
+          phone: msg.phone || '',
+          company: companyName,
+          business_type: 'General',
+          service_type: serviceType,
+          budget: budgetVal,
+          details: msg.message
+        })
+      })
+
+      // 2. Post to Active Projects (/api/projects)
+      const projectReq = adminApiFetch('/api/projects', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          title: `${msg.name} - ${serviceType}`,
+          project_type: serviceType,
+          client: msg.name,
+          description: msg.message,
+          status: 'Discovery',
+          progress: 0,
+          developer_assigned: 'Unassigned',
+          payment_status: 'Unpaid'
+        })
+      })
+
+      // 3. Update Message Status
+      const statusReq = adminApiFetch(`/api/contact/${msg.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ status: 'Active Project' })
+      })
+
+      await Promise.allSettled([quoteReq, projectReq, statusReq])
+
+      setMessages(messages.map(m => m.id === msg.id ? { ...m, status: 'Active Project' } : m))
+      setSuccess('Project successfully sent to Leads & Inquiries and Active Projects!')
+      setTimeout(() => setSuccess(''), 4000)
+    } catch (err) {
+      console.error('Failed to convert inquiry to active project:', err)
+    } finally {
+      setSelectedMsg(null)
+    }
+  }
 
   const handleMarkReplied = async (mId) => {
     try {
@@ -81,6 +155,13 @@ export default function Messages() {
         </div>
       </div>
 
+      {/* Notifications */}
+      {success && (
+        <div className="p-4 bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs rounded-xl flex items-center gap-2 font-bold uppercase tracking-wider animate-pulse">
+          <FiCheck /> {success}
+        </div>
+      )}
+
       {/* Messages List Table */}
       {loading ? (
         <p className="text-slate-400 text-sm">Loading message log...</p>
@@ -113,9 +194,11 @@ export default function Messages() {
                   </td>
                   <td>
                     <span className={`badge ${
-                      msg.status === 'Unread' 
-                        ? 'bg-rose-500/10 text-rose-400 border border-rose-500/20' 
-                        : 'bg-slate-500/10 text-slate-400 border border-slate-500/20'
+                      msg.status === 'Active Project'
+                        ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20 font-bold'
+                        : msg.status === 'Unread' 
+                          ? 'bg-rose-500/10 text-rose-400 border border-rose-500/20' 
+                          : 'bg-slate-500/10 text-slate-400 border border-slate-500/20'
                     }`}>
                       {msg.status}
                     </span>
@@ -166,16 +249,22 @@ export default function Messages() {
               </div>
             </div>
 
-            <div className="flex space-x-3 pt-4 border-t border-white/5">
+            <div className="flex flex-wrap sm:flex-nowrap gap-3 pt-4 border-t border-white/5">
+              <button
+                onClick={() => handleConvertToActiveProject(selectedMsg)}
+                className="btn-primary flex-grow py-3 flex items-center justify-center gap-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-black font-extrabold uppercase tracking-wider text-xs shadow-lg shadow-amber-500/10 cursor-pointer"
+              >
+                <FiBriefcase size={16} /> Active Project
+              </button>
               <button
                 onClick={() => handleMarkReplied(selectedMsg.id)}
-                className="btn-primary flex-grow py-3"
+                className="px-4 py-3 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl border border-white/5 transition-all text-xs font-semibold flex items-center justify-center gap-1.5 cursor-pointer"
               >
-                <FiCheck size={16} /> Mark as Replied
+                <FiCheck size={16} /> Mark Replied
               </button>
               <button
                 onClick={() => handleDeleteMsg(selectedMsg.id)}
-                className="p-3 bg-rose-500/10 hover:bg-rose-500 text-rose-400 hover:text-white rounded-xl border border-rose-500/20 transition-all flex items-center justify-center"
+                className="p-3 bg-rose-500/10 hover:bg-rose-500 text-rose-400 hover:text-white rounded-xl border border-rose-500/20 transition-all flex items-center justify-center cursor-pointer"
                 title="Delete Inquiry"
               >
                 <FiTrash2 size={16} />

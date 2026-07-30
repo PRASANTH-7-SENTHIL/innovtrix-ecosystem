@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { FiEdit2, FiCheck, FiX, FiUsers } from 'react-icons/fi'
+import { FiEdit2, FiCheck, FiX, FiUsers, FiBriefcase } from 'react-icons/fi'
 import { adminApiFetch } from '../utils/api'
 
 export default function Leads() {
@@ -32,6 +32,49 @@ export default function Leads() {
     }
     fetchLeads()
   }, [])
+
+  const handleConvertToActiveProject = async (lead) => {
+    try {
+      const token = localStorage.getItem('admin_token')
+      const projectReq = adminApiFetch('/api/projects', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          title: `${lead.name} - ${lead.service_type}`,
+          project_type: lead.service_type,
+          client: lead.name,
+          description: lead.details || `Company: ${lead.company || 'N/A'}\nBudget: ${lead.budget || 'TBD'}`,
+          status: 'Discovery',
+          progress: 0,
+          developer_assigned: lead.assigned_developer || 'Unassigned',
+          payment_status: 'Unpaid'
+        })
+      })
+
+      const statusReq = adminApiFetch(`/api/quotes/${lead.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          status: 'In Progress',
+          assigned_developer: lead.assigned_developer,
+          notes: lead.notes
+        })
+      })
+
+      await Promise.allSettled([projectReq, statusReq])
+      setLeads(leads.map(l => l.id === lead.id ? { ...l, status: 'In Progress' } : l))
+    } catch (err) {
+      console.error(err)
+    } finally {
+      setSelectedLead(null)
+    }
+  }
 
   const handleUpdateLead = async (updatedLead) => {
     try {
@@ -196,16 +239,22 @@ export default function Leads() {
               </div>
             </div>
 
-            <div className="flex space-x-3 pt-4 border-t border-white/5">
+            <div className="flex flex-wrap sm:flex-nowrap gap-3 pt-4 border-t border-white/5">
+              <button
+                onClick={() => handleConvertToActiveProject(selectedLead)}
+                className="btn-primary py-3 px-4 flex items-center justify-center gap-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-black font-extrabold uppercase tracking-wider text-xs shadow-lg shadow-amber-500/10 cursor-pointer"
+              >
+                <FiBriefcase size={16} /> Active Project
+              </button>
               <button
                 onClick={() => handleUpdateLead(selectedLead)}
-                className="btn-primary flex-grow py-3"
+                className="btn-secondary flex-grow py-3 text-xs font-bold uppercase tracking-wider cursor-pointer flex items-center justify-center gap-1.5"
               >
                 <FiCheck size={16} /> Save Changes
               </button>
               <button
                 onClick={() => setSelectedLead(null)}
-                className="btn-secondary py-3"
+                className="p-3 bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white rounded-xl border border-white/5 transition-all text-xs font-semibold cursor-pointer"
               >
                 Cancel
               </button>
